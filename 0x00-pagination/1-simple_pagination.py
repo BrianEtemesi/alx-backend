@@ -31,4 +31,18 @@ class Server:
         """
         get and paginate a dataset
         """
+        assert isinstance(page, int)
+        assert isinstance(page_size, int)
+        assert page > 0
+        assert page_size > 0
 
+        i_range = index_range(page, page_size)
+        my_list = []
+        data = self.dataset()
+        try:
+            for i in range(*i_range):
+                my_list.append(data[i])
+        except IndexError:
+            my_list = []
+
+        return my_list
