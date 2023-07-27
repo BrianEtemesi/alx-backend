@@ -21,6 +21,11 @@ class LFUCache(BaseCaching):
         sets item to key in cache
         """
         if key and item:
+            dict_cp = {}
+
+            for key_, value in self.count.items():
+                dict_cp[key_] = value
+
             if key in self.cache_data:
                 del self.cache_data[key]
                 self.count[key] += 1
@@ -32,20 +37,18 @@ class LFUCache(BaseCaching):
             max_items = BaseCaching.MAX_ITEMS
 
             if len(self.cache_data) > max_items:
-                freq = list(self.count.values())
+                freq = list(dict_cp.values())
                 least_freq = min(freq)
-
                 key_list = []
-                for _key, value in self.count.items():
-                    if _key != key:
-                        if value == least_freq:
-                            key_list.append(_key)
 
-                if len(key_list) > 0:
-                    LFU_key = key_list[0]
-                    del self.cache_data[LFU_key]
-                    del self.count[LFU_key]
-                    print("DISCARD: {}".format(LFU_key))
+                for _key, value in dict_cp.items():
+                    if value == least_freq:
+                        key_list.append(_key)
+
+                LFU_key = key_list[0]
+                del self.cache_data[LFU_key]
+                del self.count[LFU_key]
+                print("DISCARD: {}".format(LFU_key))
 
     def get(self, key):
         """
