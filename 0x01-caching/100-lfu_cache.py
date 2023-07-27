@@ -36,14 +36,16 @@ class LFUCache(BaseCaching):
                 least_freq = min(freq)
 
                 key_list = []
-                for key, value in self.count.items():
-                    if value == least_freq:
-                        key_list.append(key)
+                for _key, value in self.count.items():
+                    if _key != key:
+                        if value == least_freq:
+                            key_list.append(_key)
 
-                LFU_key = key_list[0]
-                del self.cache_data[LFU_key]
-                del self.count[LFU_key]
-                print("DISCARD: {}".format(LFU_key))
+                if len(key_list) > 0:
+                    LFU_key = key_list[0]
+                    del self.cache_data[LFU_key]
+                    del self.count[LFU_key]
+                    print("DISCARD: {}".format(LFU_key))
 
     def get(self, key):
         """
