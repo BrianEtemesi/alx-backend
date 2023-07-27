@@ -42,4 +42,3 @@ class LRUCache(BaseCaching):
             return value
         else:
             return None
-
